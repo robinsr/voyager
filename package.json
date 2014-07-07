@@ -28,6 +28,7 @@
         "imager": "latest",
         "jade": "latest",
         "mongoose": "latest",
+        "nodemon": "^1.2.1",
         "notifier": "latest",
         "passport": "latest",
         "passport-facebook": "latest",

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var async = require('async');
 var Place = require(__dirname + "/place");
+var utils = require('../../lib/utils')
 
 var expeditionSchema = new Schema({
     title: {

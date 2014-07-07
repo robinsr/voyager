@@ -115,7 +115,7 @@ exports.user = function(req, res, next, id) {
         },
         function(cb) {
             var options = {
-                cirteria: {
+                criteria: {
                     user: id
                 }
             };

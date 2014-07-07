@@ -3,3 +3,6 @@ extends ../layouts/default
 block main
   - var name = user.name ? user.name : user.username
   h1= name
+  h3 Expeditions authored:
+  - each expedition in user.expeditions
+    include ../expeditions/listitem

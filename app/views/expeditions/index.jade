@@ -6,30 +6,7 @@ block main
 block content
   - if (expeditions.length)
     - each expedition in expeditions
-      - if (expedition._id !== 'undefined')
-        .expeditions
-          h3
-            a(href='/expeditions/'+expedition._id, title=expedition.title) #{expedition.title}
-          p= expedition.body
-
-          .meta
-            span.muted= formatDate(expedition.createdAt)
-
-            - if (expedition.user)
-              | &nbsp; - &nbsp;
-              span Author &nbsp;
-
-              - var name = expedition.user.name ? expedition.user.name : expedition.user.username
-
-              a(href="/users/"+expedition.user._id)= name
-
-            - if (expedition.tags)
-              | &nbsp; - &nbsp;
-              span Tags &nbsp;
-              - each tag in expedition.tags
-                i.muted.fa.fa-tag &nbsp;
-                a.tag(href="/tags/"+tag)= tag
-                | &nbsp;&nbsp;
+      include listitem
 
     - if (pages > 1)
       ul.pagination

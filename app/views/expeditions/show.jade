@@ -1,0 +1,52 @@
+extends ../layouts/default
+
+block main
+  h1= expedition.title
+
+block content
+  .row
+    .col-md-8
+      p=expedition.body
+      .meta
+        - if (expedition.user)
+          - var name = expedition.user.name ? expedition.user.name : expedition.user.username
+          p Author :&nbsp;
+            a(href="/users/"+expedition.user._id)= name
+          P Description :&nbsp;
+            span= expedition.description
+
+        - if (expedition.tags)
+          p Tags &nbsp;
+            - each tag in expedition.tags
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+        p Created on: 
+          span.muted= formatDate(expedition.createdAt, "%b %d, %Y at %I:%M %p")
+
+      .places
+        h3 Places:
+        - each place in expedition.places
+          .placebox
+            hr
+            p= place.name
+            p.muted= place.description
+            img(src!=place.staticImage)
+
+    .col-md-4
+      - if (!expedition.isNew && expedition.image && expedition.image.files && expedition.image.files.length)
+        img(src=expedition.image.cdnUri + '/mini_' + expedition.image.files[0])
+
+  form(action="/expeditions/"+expedition.id, method="post", onsubmit="return confirm('Are you sure?')")
+    input(type='hidden', name='_csrf', value="#{csrf_token}")
+    a.btn.btn-default(href='/expeditions/'+expedition._id+'/edit', title="edit") Edit
+    | &nbsp;
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-danger(type="submit") Delete
+
+  br
+  h3 Comments
+  - each comment in expedition.comments
+    include ../comments/comment
+  include ../comments/form

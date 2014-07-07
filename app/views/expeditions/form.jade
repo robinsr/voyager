@@ -1,0 +1,102 @@
+extends ../layouts/default
+
+block main
+  h1= title
+  hr
+
+block content
+  - var action = '/expedition'
+  - action += expedition.isNew? '' : '/' + expedition.id
+
+  .row(data-bind="with:expedition")
+    .col-md-8
+      form.form-horizontal(method="post", action=action, enctype="multipart/form-data", role="form")
+
+        input(type="hidden", name="_csrf", id="csrf", value="#{csrf_token}")
+
+        - if (!expedition.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label.col-sm-2.control-label(for='title') Title
+          .col-sm-10
+            input.form-control#title(type='text', name="title", placeholder='Enter the title', data-bind="value: title")
+
+        .form-group
+          label.col-sm-2.control-label(for='description') Description
+          .col-sm-10
+            textarea.form-control#desc(rows="5", name="body", placeholder='Enter the expedition description', data-bind="value:description")
+
+        .form-group
+          label.col-sm-2.control-label(for='tags') Tags
+          .col-sm-10
+            input.form-control#tags(type='text', name="tags", placeholder='Enter the tags', data-bind="value:getTags")
+
+        .expedition-locations(data-bind="foreach:places")
+          h3 Location # 
+            span(data-bind="text:$index")
+          .interstitial-panel.panel.panel-default
+            .panel-body
+              .row
+                .col-md-12
+                  h4 Location&nbsp;
+                    span(data-bind="text:$index")
+                    &nbsp;Travel Details
+                  div(data-bind="if:$index != 0")
+                    .form-group
+                      label.col-sm-2.control-label Travel Method
+                      .col-sm-10
+                        input.form-control(type='text', placeholder="How are we getting there?", data-bind="value:interstitial.travelMethod,autofill:{ input: transportMethods, output: transportSuggestion }")
+                        ul.typeahead.dropdown-menu(class="voyager-show", style='left: 19px;', data-bind="foreach:transportSuggestion,visible:transportSuggestion().length > 0")
+                          li
+                            a(href='javascript:void();',data-bind="text:$data,click: $parent.clickSuggestion")
+                    .form-group
+                      label.col-sm-2.control-label Description
+                      .col-sm-10
+                        input.form-control(type='text', placeholder="description", data-bind="value:interstitial.description")
+                    .form-group
+                      label.col-sm-2.control-label Cost
+                      .col-sm-10    
+                        input.form-control(type='text', placeholder="cost", data-bind="value:interstitial.cost")
+          .location-panel.panel.panel-default
+            .panel-body
+              .row
+                .col-md-12
+                  h4 Location&nbsp;
+                    span(data-bind="text:$index")
+                    &nbsp;Details
+                  .form-group
+                    label.col-sm-2.control-label Name
+                    .col-sm-10
+                      input.form-control(type='text', placeholder='Enter the tags', data-bind="value:name")
+                  .form-group
+                    label.col-sm-2.control-label Latitude
+                    .col-sm-10
+                      input.form-control(type='text', placeholder='Enter the latitude', data-bind="value:latitude")
+                  .form-group
+                    label.col-sm-2.control-label Longitude
+                    .col-sm-10
+                      input.form-control(type='text', placeholder='Enter the longitude', data-bind="value:longitude")
+                  .form-group
+                    label.col-sm-2.control-label Address
+                    .col-sm-10
+                      input.form-control(type='text', placeholder='Enter the address', data-bind="value:address")
+                  .form-group
+                    label.col-sm-2.control-label Description
+                    .col-sm-10
+                      textarea.form-control#desc(rows="5", placeholder='Enter the location description', data-bind="value:description")
+                  .location-images(data-bind="foreach:images")
+                    img.location-img(data-bind="attr:{src:src,title:title}")
+        .button-group
+          button.btn.btn-primary(type='button',data-bind="click:addLocation") Add another location
+          | &nbsp;
+          button.btn.btn-default(type='button',data-bind="save:$data") Finish Expedition
+
+
+
+
+        .form-group(data-bind="ifnot:isNew")
+          .col-sm-offset-2.col-sm-10
+            button.btn.btn-primary(type='button',data-bind="save:$data") Save
+            | &nbsp;
+            a.btn(href='/expeditions', title="cancel") Cancel

@@ -118,6 +118,7 @@ expeditionSchema.statics = {
         })
             .populate('user', 'name email username')
             .populate('places')
+            .populate('comments.user')
             .exec(cb)
     },
 

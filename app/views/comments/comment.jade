@@ -12,4 +12,7 @@
         input(type='hidden', name='_csrf', value="#{csrf_token}")
         span.muted= formatDate(comment.createdAt)
         input(type="hidden", name="_method", value="DELETE")
-        button.btn.btn-danger.btn-link.error(type="submit") delete
+        - var isOwner = req.user && (req.user._id.toString() == expedition.user._id.toString())
+        - var isCommenter = req.user && (req.user._id.toString() == comment.user._id.toString())
+        - if (isOwner || isCommenter)
+          button.btn.btn-danger.btn-link.error(type="submit") delete

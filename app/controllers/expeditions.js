@@ -58,7 +58,7 @@ exports.new = function(req, res) {
 }
 
 /**
- * Create an expedition - Ajax
+ * Create an expedition - Ajax - Deprecated
  */
 
 exports.create = function(req, res) {
@@ -73,7 +73,7 @@ exports.create = function(req, res) {
 }
 
 /**
- * Edit an expedition
+ * Edit an expedition - Deprecated
  */
 
 exports.edit = function(req, res) {
@@ -84,7 +84,7 @@ exports.edit = function(req, res) {
 }
 
 /**
- * Update expedition
+ * Update expedition - Deprecated
  */
 
 exports.update = function(req, res) {
@@ -110,17 +110,6 @@ exports.show = function(req, res) {
 }
 
 
-/**
- * getJson
- * returns JSON for ajax calls
- */
-exports.getJson = function(req, res) {
-    if (req.expedition) {
-        res.json(200, req.expedition.toObject());
-    } else {
-        res.send(404);
-    }
-}
 
 /**
  * Delete an expedition
@@ -131,5 +120,79 @@ exports.destroy = function(req, res) {
     expedition.remove(function(err) {
         req.flash('info', 'Deleted successfully')
         res.redirect('/expeditions')
+    })
+}
+
+/**
+ * =================
+ * API Routes
+ * =================
+ */
+
+exports.api = {};
+
+exports.api.list = function(req, res) {
+    var page = (req.param('page') > 0 ? req.param('page') : 1) - 1
+    var perPage = 30
+    var options = {
+        perPage: perPage,
+        page: page
+    }
+
+    Expedition.list(options, function(err, expeditions) {
+        if (err) {
+            return res.send(500)
+        } else {
+            return res.json(200, expeditions);
+        }
+    })
+}
+exports.api.get = function(req, res) {
+    if (req.expedition) {
+        res.json(200, req.expedition.toObject());
+    } else {
+        res.send(404);
+    }
+}
+
+exports.api.create = function(req, res) {
+    delete req.body._id;
+    var expedition = new Expedition(req.body);
+    expedition.user = req.user;
+    var statusCode = 200;
+    var message = {}
+    expedition.save(function(err, ex) {
+        if (err){
+            statusCode = 400;
+            message.error = err.toString()
+        }
+        res.json(code, response);;
+    });
+}
+
+exports.api.update = function(req, res) {
+    var expedition = req.expedition
+    expedition = extend(expedition, req.body)
+    var statusCode = 200;
+    var message = {}
+    expedition.save(function(err, ex) {
+        if (err){
+            statusCode = 400;
+            message.error = err.toString()
+        }
+        res.json(code, response);;
+    });
+}
+
+exports.api.destroy = function(req,res){
+    var expedition = req.expedition;
+    var statusCode = 200;
+    var message = {};
+    expedition.remove(function(err) {
+        if (err){
+            statusCode = 400;
+            message.error = err.toString()
+        }
+        res.json(statusCode, message)
     })
 }

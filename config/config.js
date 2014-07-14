@@ -15,6 +15,7 @@ var path = require('path')
 
 module.exports = {
   development: {
+    allowedDomains: "*",
     db: 'mongodb://localhost/noobjs_dev',
     root: rootPath,
     notifier: notifier,
@@ -48,6 +49,7 @@ module.exports = {
     }
   },
   test: {
+    allowedDomains: "*",
     db: 'mongodb://localhost/noobjs_test',
     root: rootPath,
     notifier: notifier,

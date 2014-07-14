@@ -11,8 +11,17 @@ var express = require('express'),
 
     var env = process.env.NODE_ENV || 'development'
 
+
 module.exports = function(app, config, passport) {
 
+    //CORS middleware
+    var allowCrossDomain = function(req, res, next) {
+        res.header('Access-Control-Allow-Origin', config.allowedDomains);
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+        next();
+    }
     app.set('showStackError', true)
 
     // should be placed before express.static
@@ -61,6 +70,9 @@ module.exports = function(app, config, passport) {
         // bodyParser should be above methodOverride
         app.use(express.bodyParser())
         app.use(express.methodOverride())
+
+        // CORS
+        app.use(allowCrossDomain);
 
         // express/mongo session storage
         app.use(express.session({

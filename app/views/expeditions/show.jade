@@ -7,6 +7,30 @@ block content
   .row
     .col-md-8
       p=expedition.body
+      .rating
+        if (req.user && expedition.hasRatingFrom(req.user._id))
+          p Your Rating:&nbsp;
+            - var userRating = expedition.hasRatingFrom(req.user._id).score
+            each val in [1, 2, 3, 4, 5]
+              if (val <= userRating)
+                i.text-warning.fa.fa-star
+              else 
+                i.text-primary.fa.fa-star
+        else 
+          p Rate this epedition:
+          each val in [1, 2, 3, 4, 5]
+            form(action="/expeditions/"+expedition.id+"/ratings", method="post", onsubmit="return confirm('Are you sure?')", style="display:inline;")
+              input(type='hidden', name='_csrf', value="#{csrf_token}")
+              input(type='hidden', name='score', value=val)
+              button(type="submit")
+                i.muted.fa.fa-star
+        p Avg Rating:&nbsp;
+          - var averageRating = expedition.rating.overall
+          each val in [1, 2, 3, 4, 5]
+            if (val <= averageRating)
+              i.text-warning.fa.fa-star
+            else 
+              i.text-primary.fa.fa-star
       .meta
         - if (expedition.user)
           - var name = expedition.user.name ? expedition.user.name : expedition.user.username

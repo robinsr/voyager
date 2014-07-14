@@ -68,16 +68,29 @@ var placeSchema = new Schema({
 });
 
 placeSchema.path("latitude").validate(function(value) {
-    return /^-?[0-9]+\.[0-9]+$/.test(value);
+    if (value) {
+        return /^-?[0-9]+\.[0-9]+$/.test(value);
+    } else {
+        return true;
+    }
 }, "Invalid latitude");
 
 placeSchema.path("longitude").validate(function(value) {
-    return /^-?[0-9]+\.[0-9]+$/.test(value);
+    if (value) {
+        return /^-?[0-9]+\.[0-9]+$/.test(value);
+    } else {
+        return true;
+    }
 }, "Invalid longitude")
 
 placeSchema.virtual('staticImage').get(function() {
-    var coords = this.latitude + "," + this.longitude;
-    return util.format("http://maps.google.com/maps/api/staticmap?center=%s&zoom=16&size=200x175&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|%s", coords, coords);
+    var baseGoogleMapString = "http://maps.google.com/maps/api/staticmap?center=%s&zoom=16&size=200x175&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|%s";
+    if (!this.address) {
+        var coords = this.latitude + "," + this.longitude;
+        return util.format(baseGoogleMapString, coords, coords);
+    } else {
+        return util.format(baseGoogleMapString, this.address, this.address)
+    }
 })
 
 mongoose.model("Place", placeSchema);

@@ -149,7 +149,7 @@ exports.api.list = function(req, res) {
 }
 exports.api.get = function(req, res) {
     if (req.expedition) {
-        res.json(200, req.expedition.toObject());
+        res.json(200, req.expedition.toObject({ virtuals: true }));
     } else {
         res.send(404);
     }

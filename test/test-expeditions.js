@@ -17,7 +17,7 @@ var TEST_EXPEDITION = {
     places: [{
         name: "Nested Test Place",
         longitude: "42.00",
-        latidute: "-23.00",
+        latitude: "-23.00",
         address: "1234 Test St Seattle WA 12345",
         images: [{
             src: "http://images.image.com",
@@ -45,7 +45,36 @@ var TEST_EXPEDITION_INVALID = {
     places: [{
         name: "Nested Test Place",
         longitude: "42.00",
-        latidute: "-23.00",
+        latitude: "-23.00",
+        address: "1234 Test St Seattle WA 12345",
+        images: [{
+            src: "http://images.image.com",
+            title: "A nice photo of Test Place"
+        }],
+        description: "Test Place is awesome!",
+        placeId: null,
+        interstitial: {
+            travelMethod: "walking",
+            description: "Walk four blocks south from previous place",
+            cost: 00
+        },
+        order: 1
+    }],
+    tags: ["tag1,tag2"],
+    images: [],
+    popularity: null,
+    score: null,
+    user: null,
+    comments: []
+}
+
+var TEST_EXPEDITION_NO_LAT_LNG = {
+    title: "Expedition Title - not lat/lng",
+    description: "An expedition",
+    places: [{
+        name: "Nested Test Place",
+        longitude: null,
+        latitude: null,
         address: "1234 Test St Seattle WA 12345",
         images: [{
             src: "http://images.image.com",
@@ -212,14 +241,53 @@ describe('Expeditions', function() {
                             title: TEST_EXPEDITION.title
                         })
                         .populate('user')
-                        .exec(function(err, article) {
+                        .exec(function(err, expedition) {
                             should.not.exist(err)
-                            should.exists(article, "Article was not saved to the database")
-                            article.should.be.an.instanceOf(Expedition)
-                            article.title.should.equal(TEST_EXPEDITION.title)
-                            article.description.should.equal(TEST_EXPEDITION.description)
-                            article.user.email.should.equal(TEST_USER.email)
-                            article.user.name.should.equal(TEST_USER.name)
+                            should.exists(expedition, "expedition was not saved to the database")
+                            expedition.should.be.an.instanceOf(Expedition)
+                            expedition.title.should.equal(TEST_EXPEDITION.title)
+                            expedition.description.should.equal(TEST_EXPEDITION.description)
+                            expedition.user.email.should.equal(TEST_USER.email)
+                            expedition.user.name.should.equal(TEST_USER.name)
+                            done()
+                        })
+                })
+            })
+
+            describe('Valid Params but no lat/lng',function(){
+                before(function(done) {
+                    Expedition.count(function(err, cnt) {
+                        count = cnt
+                        done()
+                    })
+                })
+
+                it('should respond 200', function(done) {
+                    agent
+                        .post('/expeditions')
+                        .send(TEST_EXPEDITION_NO_LAT_LNG)
+                        .expect('Content-Type', /application\/json/)
+                        .expect(200)
+                        .end(done)
+                })
+
+                it('should insert a record to the database', function(done) {
+                    Expedition.count(function(err, cnt) {
+                        cnt.should.equal(count + 1)
+                        done()
+                    })
+                })
+
+                it('should save the expedition to the database with geocode lat/lng', function(done) {
+                    Expedition
+                        .findOne({
+                            title: TEST_EXPEDITION_NO_LAT_LNG.title
+                        })
+                        .populate('user')
+                        .exec(function(err, expedition) {
+                            should.not.exist(err)
+                            should.exist(expedition.places[0].latitude);
+                            should.exist(expedition.places[0].longitude);
                             done()
                         })
                 })

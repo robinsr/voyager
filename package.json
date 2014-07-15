@@ -1,54 +1,55 @@
 {
-    "name": "voyager",
-    "description": "Interactive city discovery",
-    "version": "0.0.1",
-    "private": true,
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/robinsr/voyager-fork.git"
-    },
-    "keywords": [
-        "test"
-    ],
-    "engines": {
-        "node": "0.10.x",
-        "npm": "1.2.x"
-    },
-    "scripts": {
-        "start": "NODE_ENV=development ./node_modules/.bin/nodemon server.js",
-        "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --timeout 10000 test/test-*.js"
-    },
-    "dependencies": {
-        "async": "latest",
-        "connect-flash": "latest",
-        "connect-mongo": "latest",
-        "express": "3.4.x",
-        "extend": "^1.3.0",
-        "forever": "latest",
-        "imager": "latest",
-        "jade": "latest",
-        "mongoose": "latest",
-        "nodemon": "^1.2.1",
-        "notifier": "latest",
-        "passport": "latest",
-        "passport-facebook": "latest",
-        "passport-github": "latest",
-        "passport-google-oauth": "latest",
-        "passport-linkedin": "latest",
-        "passport-local": "latest",
-        "passport-twitter": "latest",
-        "view-helpers": "latest",
-        "winston": "latest"
-    },
-    "devDependencies": {
-        "supertest": "latest",
-        "should": "latest",
-        "mocha": "latest",
-        "nodemon": "latest",
-        "grunt": "latest",
-        "grunt-contrib-uglify": "latest",
-        "grunt-contrib-watch": "latest",
-        "grunt-contrib-concat": "latest",
-        "grunt-contrib-mocha": "latest"
-    }
+  "name": "voyager",
+  "description": "Interactive city discovery",
+  "version": "0.0.1",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robinsr/voyager-fork.git"
+  },
+  "keywords": [
+    "test"
+  ],
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "scripts": {
+    "start": "NODE_ENV=development ./node_modules/.bin/nodemon server.js",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --timeout 10000 test/test-*.js"
+  },
+  "dependencies": {
+    "async": "latest",
+    "commander": "^2.2.0",
+    "connect-flash": "latest",
+    "connect-mongo": "latest",
+    "express": "3.4.x",
+    "extend": "^1.3.0",
+    "forever": "latest",
+    "imager": "latest",
+    "jade": "latest",
+    "mongoose": "latest",
+    "nodemon": "^1.2.1",
+    "notifier": "latest",
+    "passport": "latest",
+    "passport-facebook": "latest",
+    "passport-github": "latest",
+    "passport-google-oauth": "latest",
+    "passport-linkedin": "latest",
+    "passport-local": "latest",
+    "passport-twitter": "latest",
+    "view-helpers": "latest",
+    "winston": "latest"
+  },
+  "devDependencies": {
+    "supertest": "latest",
+    "should": "latest",
+    "mocha": "latest",
+    "nodemon": "latest",
+    "grunt": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-mocha": "latest"
+  }
 }

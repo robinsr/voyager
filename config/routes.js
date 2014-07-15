@@ -124,4 +124,11 @@ module.exports = function(app, passport) {
     app.post('/api/expeditions',     expeditions.api.create);
     app.put( '/api/expeditions/:id', expeditions.api.update);
     app.del( '/api/expeditions/:id', expeditions.api.destroy);
+
+
+    /**
+     * Non-resource/utility routes
+     */
+    var geocode = require(__dirname + '/../app/controllers/geocode')
+    app.get('/api/geocode', geocode.getLatLng);
 }

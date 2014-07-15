@@ -46,6 +46,9 @@ module.exports = {
       clientID: "CONSUMER_KEY",
       clientSecret: "CONSUMER_SECRET",
       callbackURL: "http://localhost:3000/auth/linkedin/callback"
+    },
+    geocode: {
+      key: 'AIzaSyBsuSBHkOi7iEz7O7dX_Q06IwM5Rc8jYQw'
     }
   },
   test: {
@@ -80,6 +83,9 @@ module.exports = {
       clientID: "CONSUMER_KEY",
       clientSecret: "CONSUMER_SECRET",
       callbackURL: "http://localhost:3000/auth/linkedin/callback"
+    },
+    geocode: {
+      key: 'AIzaSyBsuSBHkOi7iEz7O7dX_Q06IwM5Rc8jYQw'
     }
   },
   production: {}

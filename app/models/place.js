@@ -95,8 +95,6 @@ placeSchema.pre("save",function(next){
 
 // validate latitude is a valid coordinate
 placeSchema.path("latitude").validate(function(value) {
-    console.log('validating latitude')
-    console.log(this);
     if (value) {
         return /^-?[0-9]+\.[0-9]+$/.test(value);
     } else {

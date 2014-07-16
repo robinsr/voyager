@@ -160,13 +160,15 @@ exports.api.create = function(req, res) {
     var expedition = new Expedition(req.body);
     expedition.user = req.user;
     var statusCode = 200;
-    var message = {}
+    var message = expedition;
     expedition.save(function(err, ex) {
         if (err){
             statusCode = 400;
-            message.error = err.toString()
+            message = {
+                error: err.toString()
+            }
         }
-        res.json(code, response);;
+        res.json(statusCode, message);;
     });
 }
 
@@ -180,7 +182,7 @@ exports.api.update = function(req, res) {
             statusCode = 400;
             message.error = err.toString()
         }
-        res.json(code, response);;
+        res.json(statusCode, message);;
     });
 }
 

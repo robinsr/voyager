@@ -24,7 +24,7 @@ module.exports = function (passport, config) {
 
   // use local strategy
   passport.use(new LocalStrategy({
-      usernameField: 'email',
+      usernameField: 'usernameOrEmail',
       passwordField: 'password'
     },
     function(email, password, done) {

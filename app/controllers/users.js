@@ -9,9 +9,14 @@ var mongoose = require('mongoose'),
     async = require('async');
 
 var login = function(req, res) {
-    var redirectTo = req.session.returnTo ? req.session.returnTo : '/'
-    delete req.session.returnTo
-    res.redirect(redirectTo)
+    res.json({
+        id: req.sessionID,
+        user: {
+            _id : req.user._id,
+            name: req.user.name,
+            username: req.user.username
+        }
+    });
 }
 
 exports.signin = function(req, res) {}

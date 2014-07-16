@@ -31,10 +31,7 @@ module.exports = function(app, passport) {
     app.get('/logout', users.logout)
     app.post('/users', users.create)
     app.post('/users/session',
-        passport.authenticate('local', {
-            failureRedirect: '/login',
-            failureFlash: 'Invalid email or password.'
-        }), users.session)
+        passport.authenticate('local'), users.session)
     app.get('/users/:userId', users.show)
     app.get('/auth/facebook',
         passport.authenticate('facebook', {

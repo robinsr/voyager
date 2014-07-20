@@ -1,0 +1,6 @@
+[submodule "app/voyager-desktop"]
+	path = app/voyager-desktop
+	url = git@github.com:robinsr/voyager-desktop.git
+[submodule "voyager-desktop"]
+	path = voyager-desktop
+	url = git@github.com:robinsr/voyager-desktop.git

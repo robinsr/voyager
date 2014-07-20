@@ -33,7 +33,7 @@ module.exports = function(app, config, passport) {
     }))
 
     app.use(express.favicon())
-    app.use(express.static(config.root + '/public'))
+    app.use(express.static(config.root + '/voyager-desktop'))
 
     // Logging
     // Use winston on production
@@ -54,7 +54,15 @@ module.exports = function(app, config, passport) {
 
     // set views path, template engine and default layout
     app.set('views', config.root + '/app/views')
-    app.set('view engine', 'jade')
+    app.set('view engine', 'jade');
+
+    var csrfValue = function(req) {
+        var token = (req.body && req.body._csrf)
+        || (req.query && req.query._csrf)
+        || (req.headers['x-csrf-token'])
+        || (req.headers['x-xsrf-token']);
+        return token;
+    };
 
     app.configure(function() {
         // expose package.json and env to views
@@ -95,13 +103,13 @@ module.exports = function(app, config, passport) {
 
         // adds CSRF support
         if (process.env.NODE_ENV !== 'test') {
-            app.use(express.csrf())
+            app.use(express.csrf({value: csrfValue}))
 
             // This could be moved to view-helpers :-)
             app.use(function(req, res, next) {
-                res.locals.csrf_token = req.csrfToken()
-                next()
-            })
+                res.cookie('XSRF-TOKEN', req.session._csrf);
+                next();
+            });
         }
 
         // routes should be at the last

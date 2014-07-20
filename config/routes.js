@@ -2,7 +2,8 @@
  * Module dependencies.
  */
 
-var async = require('async')
+var async = require('async');
+var config = require(__dirname + "/config");
 
 /**
  * Controllers
@@ -95,7 +96,9 @@ module.exports = function(app, passport) {
     app.del('/expeditions/:id', articleAuth, expeditions.destroy);
 
     // home route
-    app.get('/', expeditions.index)
+    app.get('/', function (req,res){
+        res.sendfile(config[process.env.NODE_ENV].root + "/voyager-desktop/app/index.html")
+    });
 
     // comment routes
     var comments = require('../app/controllers/comments')

@@ -4,8 +4,9 @@
 
 exports.requiresLogin = function(req, res, next) {
     if (req.isAuthenticated()) return next()
-    if (req.method == 'GET') req.session.returnTo = req.originalUrl
-    res.redirect('/login')
+    res.send(400, {
+        error: "Requires login"
+    })
 }
 
 /*
@@ -15,8 +16,9 @@ exports.requiresLogin = function(req, res, next) {
 exports.user = {
     hasAuthorization: function(req, res, next) {
         if (req.profile.id != req.user.id) {
-            req.flash('error', 'You are not authorized')
-            return res.redirect('/users/' + req.profile.id)
+            res.send(400, {
+                error: "You are not authorized"
+            })
         }
         next()
     }
@@ -29,8 +31,9 @@ exports.user = {
 exports.expedition = {
     hasAuthorization: function(req, res, next) {
         if (req.expedition.user.id != req.user.id) {
-            req.flash('error', 'You are not authorized')
-            return res.redirect('/expeditions/' + req.expedition.id)
+            res.send(400, {
+                error: "You are not authorized"
+            })
         }
         next()
     }
@@ -47,8 +50,9 @@ exports.comment = {
         if (req.user.id === req.comment.user.id || req.user.id === req.expedition.user.id) {
             next()
         } else {
-            req.flash('error', 'Only the commenter or the expedition owner can remove this comment')
-            res.redirect('/expeditions/' + req.expedition.id)
+            res.send(400, {
+                error: "Only the commenter or the expedition owner can remove this comment"
+            })
         }
     }
 }

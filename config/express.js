@@ -109,7 +109,7 @@ module.exports = function(app, config, passport) {
 
             // This could be moved to view-helpers :-)
             app.use(function(req, res, next) {
-                res.cookie('XSRF-TOKEN', req.session._csrf);
+                res.cookie('XSRF-TOKEN', req.csrfToken());
                 next();
             });
         }

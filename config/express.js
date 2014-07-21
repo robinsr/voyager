@@ -33,7 +33,9 @@ module.exports = function(app, config, passport) {
     }))
 
     app.use(express.favicon())
-    app.use(express.static(config.root + '/voyager-desktop'))
+    app.use(express.static(config.root + '/voyager-desktop/.tmp'))
+    app.use('/bower_components', express.static(config.root + '/voyager-desktop/bower_components'))
+    app.use(express.static(config.root + '/voyager-desktop/app'))
 
     // Logging
     // Use winston on production

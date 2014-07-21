@@ -157,6 +157,7 @@ exports.api.get = function(req, res) {
 
 exports.api.create = function(req, res) {
     delete req.body._id;
+    delete req.body.user;
     var expedition = new Expedition(req.body);
     expedition.user = req.user;
     var statusCode = 200;

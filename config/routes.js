@@ -13,12 +13,12 @@ var users = require('../app/controllers/users'),
     expeditions = require('../app/controllers/expeditions'),
     auth = require('./middlewares/authorization')
 
-    /**
-     * Route middlewares
-     */
+/**
+ * Route middlewares
+ */
 
-    var articleAuth = [auth.requiresLogin, auth.expedition.hasAuthorization]
-var commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization]
+var expeditionAuth = [auth.requiresLogin, auth.expedition.hasAuthorization]
+var commentAuth =    [auth.requiresLogin, auth.comment.hasAuthorization]
 
 /**
  * Expose routes
@@ -85,46 +85,34 @@ module.exports = function(app, passport) {
 
     app.param('userId', users.user)
 
-    // expedition routes
-    app.param('id', expeditions.load);
-    app.get('/expeditions', expeditions.index);
-    app.get('/expeditions/new', auth.requiresLogin, expeditions.new);
-    app.post('/expeditions', auth.requiresLogin, expeditions.create);
-    app.get('/expeditions/:id', expeditions.show);
-    app.get('/expeditions/:id/edit', articleAuth, expeditions.edit);
-    app.put('/expeditions/:id', articleAuth, expeditions.update);
-    app.del('/expeditions/:id', articleAuth, expeditions.destroy);
-
     // home route
     app.get('/', function (req,res){
         res.sendfile(config[process.env.NODE_ENV].root + "/voyager-desktop/app/index.html")
     });
 
+    // expedition routes
+    app.param('id', expeditions.load);
+    app.get( '/api/expeditions',     expeditions.api.list);
+    app.get( '/api/expeditions/:id', expeditions.api.get);
+    app.post('/api/expeditions',     expeditions.api.create);
+    app.put( '/api/expeditions/:id', expeditionAuth, expeditions.api.update);
+    app.del( '/api/expeditions/:id', expeditionAuth, expeditions.api.destroy);
+
+
     // comment routes
     var comments = require('../app/controllers/comments')
     app.param('commentId', comments.load)
-    app.post('/expeditions/:id/comments', auth.requiresLogin, comments.create)
-    app.get('/expeditions/:id/comments', auth.requiresLogin, comments.create)
-    app.del('/expeditions/:id/comments/:commentId', commentAuth, comments.destroy)
+    app.post('/api/expeditions/:id/comments',            auth.requiresLogin, comments.create)
+    app.get(' /api/expeditions/:id/comments',            auth.requiresLogin, comments.create)
+    app.del(' /api/expeditions/:id/comments/:commentId', commentAuth, comments.destroy)
 
     // tag routes
     var tags = require('../app/controllers/tags')
-    app.get('/tags/:tag', tags.index)
+    app.get('/api/tags/:tag', tags.index)
 
     // rating routes
     var ratings = require(__dirname + '/../app/controllers/ratings');
-    app.post('/expeditions/:id/ratings', auth.requiresLogin, ratings.create)
-
-    /**
-     * API routes
-     */
-
-    app.get( '/api/expeditions', expeditions.api.list);
-    app.get( '/api/expeditions/:id', expeditions.api.get);
-    app.post('/api/expeditions',     expeditions.api.create);
-    app.put( '/api/expeditions/:id', expeditions.api.update);
-    app.del( '/api/expeditions/:id', expeditions.api.destroy);
-
+    app.post('/api/expeditions/:id/ratings', auth.requiresLogin, ratings.create)
 
     /**
      * Non-resource/utility routes
